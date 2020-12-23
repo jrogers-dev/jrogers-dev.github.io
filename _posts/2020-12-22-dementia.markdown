@@ -1,0 +1,17 @@
+---
+layout: post
+title:      "Dementia!!!"
+date:       2020-12-23 01:53:09 +0000
+permalink:  dementia
+---
+
+
+This is a placeholder blog post for my Rails and Javascript SPA, a memory-style game titled "Dementia!!!"
+
+-Discuss stack tech
+
+-Explain my decisions for models and relationships
+
+-Cover node addons used for the Javascript frontend
+
+-Explain the flow from user interaction on the frontend to data creation/requisition on the backend and back to frontend manipulation to display the result of the interaction.
