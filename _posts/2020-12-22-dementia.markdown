@@ -6,12 +6,44 @@ permalink:  dementia
 ---
 
 
-This is a placeholder blog post for my Rails and Javascript SPA, a memory-style game titled "Dementia!!!"
+**Basic Overview**
 
--Discuss stack tech
+	Dementia!!! is a memory-style, single-player game where the player is presented with 10 pairs of cards spread out, face-down, positioned randomly in a 5 by 4 grid arrangement, and a 2 minute timer.
 
--Explain my decisions for models and relationships
+	Rounds of play consist of the player turning a card of their choosing face-up, revealing its value, then turning over another card of their choosing in an attempt to find the first card’s match. If the two revealed cards do not match, they are flipped face-down and a new round begins. If the revealed cards do match, they are removed from play and the player scores a point. 
 
--Cover node addons used for the Javascript frontend
+	If the player matches all ten pair, the board is repopulated and the game continues. The game is over when the 2 minute timer expires.
 
--Explain the flow from user interaction on the frontend to data creation/requisition on the backend and back to frontend manipulation to display the result of the interaction.
+**Technology Stack
+**
+	Dementia!!! utilizes a Ruby on Rails API backend with an SQLite3 database that serves data in JSON format to a vanilla Javascript frontend. The frontend utilizes TailwindCSS for styling, positioning and animation. 
+
+
+**Details
+**
+	My initial concept for the game included multi-player, each player with their own board of cards, and successful matches could alter another player’s board or cards to hinder them. I realized I wouldn’t be able to implement such complex features within the project time-frame, so I pared down the features to a bare-bones, single-player experience. However, I intend to implement these features in the future and wrote my code with that in mind. This is why the Game model has many Players, or why there’s an attribute for a board’s current rotation.
+
+	After determining what models I’d need and their associations, based on the real-world objects I was trying to emulate, setting up the back-end was simple and straight forward. I created models for Game, which would contain all data and objects associated with a round of the game; Player, to represent the human players; Board to represent the physical playing field the cards are laid out on, as well as attributes such as whether it is cleared; Position to represent one of the twenty positions on a board, which can only move if the board moves; and Card to represent valued cards that sit in the Positions of the Board, which can move freely between positions, but such movement isn’t demonstrated in the single-player version.
+
+	Since my associations between models was essentially a straight chain of ownership, I decided to nest the routes for each model within its owner’s routes, meaning, to fetch a single card, you’d need to have the id’s of its position, the board, the player and the game they’re all in. 
+
+	Controllers were very boilerplate, with just the essential CRUD functionality and a strong parameters helper method. Jsonapi-serializer was used to generate JSON serializers for rendering the models’ data. 
+
+	On the front-end, I decided to use TailwindCSS for styling and the positioning and animation flair, but nothing else. Tailwind was installed with Node Package Manager via the instructions on the site without issue. 
+
+	My index.js file is separated into sections for classes and listeners for ease of reading. The class section consists of classes representing the five models on the back-end, a static Dementia class for storing attributes and functions that control the app and its layout, and a FetchAdapter that includes fetch methods for each CRUD action and error handling. 
+
+	The layout is dynamically generated and consists of a header for displaying time, messages and scores and a large field that serves as the container for a 5 by 4 grid of card positions and a popup dialogue for user interaction. 
+
+	The app’s flow starts with the DOMContentLoaded listener, which calls a buildPage function that creates and appends all the elements needed in the game, applying ‘hidden’ for the table-container and the popup. All the elements’ references are cached in a static array in class Dementia. Once the structure is complete, the landing page is displayed where the user can click an indicated button to create a new game. 
+
+	When the new game button is pressed, a new Game object is created on the front-end, then posted to the back-end for persistence. The page then shifts to a setup screen where the player can enter their name via a dialogue box. The dialogue also contains a “start game” button that calls gameSetup, which builds the objects needed for the game, posting them to the back-end for persistence via fetch. Then the page transitions to the play phase. 
+
+	During the play phase, the player has 120 seconds to match as many pairs as possible. Clicking on the first card in a turn will mark it as selected by applying a bounce effect. Once a second card is selected, the two are compared and either return to their face-down state or are removed from the board, depending on if they matched. The player receives one point per match, with the game ending when two minutes is up. At that time, a “Game Over”-style message is displayed.
+
+
+**Takeaways**
+
+	This project really put together all the pieces of the full-stack developer position, and for me, was the first project to start feeling like a real “web app.” Now that I have the knowledge to construct both sides of an app, I’m constantly having new app ideas because I can work through how to accomplish them. 
+
+	I also learned an immense amount about styling via TailwindCSS without having to memorize any CSS syntax, which blew my mind. Man, I hate writing CSS
