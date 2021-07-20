@@ -1,6 +1,6 @@
 ---
 layout: post
-title:      "Connecting Crypto"
+title:      "Further Crypto"
 date:       2021-07-19 03:45:01 -0400
 permalink:  further_crypto
 ---
